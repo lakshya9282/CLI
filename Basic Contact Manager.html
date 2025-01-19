@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Contact Manager</h1>
+
+        <input type="text" id="name" placeholder="Enter name">
+        <input type="text" id="phone" placeholder="Enter phone number">
+        <button onclick="addContact()">Add Contact</button>
+
+        <button onclick="displayContacts()">Display Contacts</button>
+
+        <input type="text" id="searchName" placeholder="Search by name">
+        <button onclick="searchContact()">Search Contact</button>
+
+        <input type="text" id="removeName" placeholder="Remove by name">
+        <button onclick="removeContact()">Remove Contact</button>
+
+        <div id="message" class="error"></div>
+
+        <ul id="contactsList"></ul>
+    </div>
+
+    <script>
+        let contacts = {};
+
+        function addContact() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message');
+
+            if (name && phone) {
+                contacts[name] = phone;
+                message.textContent = `Contact ${name} added.`;
+                clearInputs();
+                displayContacts();
+            } else {
+                message.textContent = 'Please enter both name and phone number.';
+            }
+        }
+
+        function removeContact() {
+            const name = document.getElementById('removeName').value;
+            const message = document.getElementById('message');
+
+            if (name in contacts) {
+                delete contacts[name];
+                message.textContent = `Contact ${name} removed.`;
+                displayContacts();
+            } else {
+                message.textContent = `Contact ${name} not found.`;
+            }
+        }
+
+        function searchContact() {
+            const name = document.getElementById('searchName').value;
+            const message = document.getElementById('message');
+
+            if (name in contacts) {
+                message.textContent = `${name}: ${contacts[name]}`;
+            } else {
+                message.textContent = `Contact ${name} not found.`;
+            }
+        }
+
+        function displayContacts() {
+            const contactsList = document.getElementById('contactsList');
+            contactsList.innerHTML = '';
+
+            if (Object.keys(contacts).length > 0) {
+                for (let name in contacts) {
+                    const li = document.createElement('li');
+                    li.textContent = `${name}: ${contacts[name]}`;
+                    contactsList.appendChild(li);
+                }
+            } else {
+                contactsList.innerHTML = '<li>No contacts available</li>';
+            }
+        }
+
+        function clearInputs() {
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('searchName').value = '';
+            document.getElementById('removeName').value = '';
+        }
+    </script>
+
+</body>
+</html>
+
